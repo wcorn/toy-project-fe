@@ -50,6 +50,7 @@ jobs:
 
       - name: Update Helm Values YAML
         run: |
+          ls
           sed -i 's|tag: .*|tag: ${{ env.VERSION }}|' charts/peter-service/values.yaml
 
       - name: Commit and Push Changes

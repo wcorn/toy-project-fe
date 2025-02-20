@@ -38,5 +38,5 @@ jobs:
 
       - name: web docker build and push
         run: |
-          docker build -t ${{ env.DOCKER_IMAGE }} .
+          docker build -t ${{ env.DOCKER_IMAGE }}:${{ env.VERSION }} .
           docker push ${{ env.DOCKER_IMAGE }}

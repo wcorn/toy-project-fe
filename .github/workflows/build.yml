@@ -39,4 +39,21 @@ jobs:
       - name: web docker build and push
         run: |
           docker build -t ${{ env.DOCKER_IMAGE }}:${{ env.VERSION }} .
-          docker push ${{ env.DOCKER_IMAGE }}:${{ env.VERSION }} 
+          docker push ${{ env.DOCKER_IMAGE }}:${{ env.VERSION }}
+
+      - name: Clone Target Repository (MOABOA-GitOps)
+        run: |
+          git clone https://x-access-token:${{ secrets.GHCR_TOKEN }}@github.com/wcorn/toy-gitops.git
+          cd toy-gitops
+          git config user.email "dsk08208@gmail.com"
+          git config user.name "wcorn"
+
+      - name: Update Helm Values YAML
+        run: |
+          sed -i 's|tag: .*|tag: ${{ env.VERSION }}|' charts/peter-service/values.yaml
+
+      - name: Commit and Push Changes
+        run: |
+          git add charts/peter-service/values.yaml
+          git commit -m "[UPDATE] peter service image tag ${{ env.VERSION }}"
+          git push origin main

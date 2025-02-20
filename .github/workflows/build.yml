@@ -17,7 +17,7 @@ jobs:
       - name: Checkout Main Repository
         uses: actions/checkout@v2
         with:
-          path: main-repo  # ✅ Checkout repository를 `main-repo` 디렉토리에 저장
+          path: main-repo
 
       - name: Setup docker buildx
         id: buildx
@@ -46,18 +46,18 @@ jobs:
 
       - name: Clone Target Repository (MOABOA-GitOps)
         run: |
-          git clone https://x-access-token:${{ secrets.GHCR_TOKEN }}@github.com/wcorn/toy-gitops.git ~/gitops-repo
-          cd ~/gitops-repo
+          git clone https://x-access-token:${{ secrets.GHCR_TOKEN }}@github.com/wcorn/toy-gitops.git gitops-repo
+          cd gitops-repo
           git config user.email "dsk08208@gmail.com"
           git config user.name "wcorn"
 
       - name: Update Helm Values YAML
-        working-directory: ~/gitops-repo
+        working-directory: gitops-repo
         run: |
           sed -i 's|tag: .*|tag: ${{ env.VERSION }}|' charts/peter-service/values.yaml
 
       - name: Commit and Push Changes
-        working-directory: ~/gitops-repo
+        working-directory: gitops-repo
         run: |
           git add charts/peter-service/values.yaml
           git commit -m "[UPDATE] peter service image tag ${{ env.VERSION }}"

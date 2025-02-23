@@ -1,2 +1,2 @@
 FROM nginx:1.27
-COPY html /usr/share/nginx/html
+run rm -rf  /usr/share/nginx/html
